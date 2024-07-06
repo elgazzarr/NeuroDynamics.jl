@@ -1,3 +1,9 @@
+"""
+    Decoder
+
+A decoder is a function that takes a latent variable and produces an output (Observations or Control inputs).    
+
+"""
 struct Decoder{ON} <: Lux.AbstractExplicitContainerLayer{(:output_net,)} 
     output_net::ON
 end
@@ -114,10 +120,17 @@ function MLP_Decoder(latent_dim, obs_dim, hidden_dim, n_hidden, noise="Gaussian"
     return Decoder(output_net)
 end
 
+"""
+    MultiDecoder
 
+A MultiDecoder is a function that takes a latent variable and produces multiple outputs (Observations or Control inputs).
 
-##################################################
+Fields:
 
+- `shared_net`: The shared network.
+- `decoders`: The decoders.
+    
+"""
 struct MultiDecoder <: Lux.AbstractExplicitContainerLayer{(:shared_net, :decoders,)}
     shared_net
     decoders
@@ -140,7 +153,6 @@ returns:
     - 'st': The states of the decoder.
 
 """
-
 function(model::MultiDecoder)(x, p, st)
     x_shared, st_shared = model.shared_net(x, p.shared_net, st.shared_net)
     ŷ, st_decoder = model.decoders(x_shared, p.decoders, st.decoders) 

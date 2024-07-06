@@ -42,7 +42,6 @@ Returns:
   - `x̂₀`: Encoded initial hidden state.
   - `kl_path`: KL divergence path. (Only for SDE dynamics, otherwise `nothing`)
 """
-
 function (model::LatentUDE)(y::AbstractArray, u::Union{Nothing, AbstractArray}, ts::AbstractArray, ps::ComponentArray, st::NamedTuple)
        forward!(model, y, u, ts, ps, st, model.dynamics)
 end
@@ -53,7 +52,6 @@ end
 
 The forward pass of the LatentSDE model.
 """
-
 function forward!(model::LatentUDE, y::AbstractArray, u::Union{Nothing, AbstractArray}, ts::AbstractArray, ps::ComponentArray, st::NamedTuple, dynamics::SDE)
     x̂₀, context = model.obs_encoder(y, ps.obs_encoder, st.obs_encoder)[1]
     x₀ = sample_rp(x̂₀)
@@ -76,7 +74,6 @@ end
 
 The forward pass of the LatentODE model.
 """
-
 function forward!(model::LatentUDE, y::AbstractArray, u::Union{Nothing, AbstractArray}, ts::AbstractArray, ps::ComponentArray, st::NamedTuple, dynamics::ODE)
     x̂₀, _ = model.obs_encoder(y, ps.obs_encoder, st.obs_encoder)[1] 
     x₀ = sample_rp(x̂₀)
@@ -113,7 +110,6 @@ Returns:
   - `ū`: Decoded control inputs from the sampled hidden states * `n_samples`.
   - `x`: Sampled hidden state trajectories * `n_samples`.
 """
-
 function predict(model::LatentUDE, y::AbstractArray, u::Union{Nothing, AbstractArray}, ts::AbstractArray, ps::ComponentArray, st::NamedTuple, n_samples::Int)
     x̂₀, _ = model.obs_encoder(y, ps.obs_encoder, st.obs_encoder)[1] 
     u_enc = model.ctrl_encoder(u, ps.ctrl_encoder, st.ctrl_encoder)[1]

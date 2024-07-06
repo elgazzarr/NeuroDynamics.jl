@@ -13,7 +13,6 @@ returns:
     - The KL divergence.
 
 """
-
 function kl_normal(μ, σ²)
     kl = 0.5 * sum(σ² .+ μ .^ 2 .- 1 .- log.(σ²))
     return kl
@@ -34,7 +33,6 @@ returns:
     - The log-likelihood.
 
 """
-
 function poisson_loglikelihood(λ, y) 
     @assert size(λ) == size(y) "poisson_loglikelihood: Rates and spikes should be of the same shape"
     @assert !any(isnan.(λ)) "poisson_loglikelihood: NaN rate predictions found"
@@ -61,7 +59,6 @@ returns:
     - The log-likelihood.
 
 """
-
 function normal_loglikelihood(μ, σ², y)
     ll = -0.5 * sum(log.(2π * σ²) + ((y - μ).^2 ./ σ²))
     return ll
@@ -83,7 +80,6 @@ returns:
     - The mean squared error.
 
 """
-
 function mse(ŷ, y)
     return sum(abs, ŷ .- y)
 end
@@ -103,7 +99,6 @@ returns:
     - The bits per spike.
 
 """
-
 function bits_per_spike(rates, spikes)
     @assert size(rates) == size(spikes) "Rates and spikes must have the same shape"
 
@@ -134,8 +129,6 @@ returns:
     - The linear schedule.
 
 """
-
-
 function frange_cycle_linear(n_iter, start::T=0.0f0, stop::T=1.0f0,  n_cycle=4, ratio=0.5) where T
     L = ones(n_iter) * stop
     period = n_iter/n_cycle
