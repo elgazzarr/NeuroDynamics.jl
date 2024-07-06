@@ -21,3 +21,8 @@ deploydocs(;
     repo="github.com/elgazzarr/NeuroDynamics.jl",
     devbranch="main",
 )
+
+```@docs
+MyFunction
+```
+
