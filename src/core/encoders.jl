@@ -49,9 +49,7 @@ end
 
 Constructs an identity encoder. Useful for fully observable systems.
     
-    """
-
-
+"""
 function Identity_Encoder()
     linear_net = Lux.NoOpLayer()
     init_net = Lux.SelectDim(2, 1)
@@ -74,7 +72,6 @@ Arguments:
 - `t_init`: Number of initial time steps to use for the initial hidden state.
 
 """
-
 function Recurrent_Encoder(obs_dim, latent_dim, context_dim, hidden_dim, t_init)
     linear_net = Dense(obs_dim => hidden_dim)
     init_net = Chain(

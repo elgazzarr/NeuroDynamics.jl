@@ -13,13 +13,13 @@ Arguments:
   - 'device': The device on which the model is stored. Default is `cpu`. 
 
 """
-struct LatentUDE <: LatentVariableModel
-    obs_encoder 
-    ctrl_encoder
+@with_kw struct LatentUDE <: LatentVariableModel
+    obs_encoder = Identity_Encoder()
+    ctrl_encoder = NoOpLayer()
     dynamics
-    obs_decoder
-    ctrl_decoder
-    device
+    obs_decoder = Identity_Decoder()
+    ctrl_decoder = NoOpLayer()
+    device = cpu_device()
 end 
 
 """

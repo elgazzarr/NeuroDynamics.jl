@@ -1,7 +1,6 @@
 # NeuroDynamics.jl
 
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://elgazzarr.github.io/NeuroDynamics.jl/stable/)
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://elgazzarr.github.io/NeuroDynamics.jl/dev/)
 [![Build Status](https://github.com/elgazzarr/NeuroDynamics.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/elgazzarr/NeuroDynamics.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/elgazzarr/NeuroDynamics.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/elgazzarr/NeuroDynamics.jl)
@@ -9,29 +8,29 @@
 
 Scalable generative modeling of neural dynamics in Julia.
 
-NeuroDyanmics.jl is a package for (inverse) modeling of neural and behvaioural dynamics across the scales [[1](https://arxiv.org/abs/2403.14510)].
+NeuroDyanmics.jl is a package for (inverse) modeling of neural and behvaioural dynamics[[1](https://arxiv.org/abs/2403.14510)].
 Neural systems are modeld as a system of of stochastic differential equations with differentiable drift and diffusion functions.  
 The package provides a high-level interface for specifying and fitting these models to neural data using variational inference [[2](https://arxiv.org/abs/2001.01328), [3](https://arxiv.org/abs/1905.09883)] and gradient-based optimization.
 
-## Version 0.1.0
+## Version 1.0.0-DEV
 
-This is the first release of the package. The package is still under development and we are working on adding more features and improving the documentation.
+The pacakage is still in DEV mode but if you can't wait, feel free to use it and report any issues you encounter.
 
 ## Installation
 
-The package can be installed by running the following command in the Julia REPL:
+The dev version can be installed by running the following command in the Julia REPL:
 
 ```julia
 using Pkg
-Pkg.add("NeuroDynamics")
+Pkg.dev("https://github.com/elgazzarr/NeuroDynamics.jl")
 ```
 
-## Tutorials and Documentation
+## Tutorials, Examples, and Documentation
 
 For more information, check out the [documentation](https://elgazzarr.github.io/NeuroDynamics.jl/stable/).
 
 
-## Example
+## Example of a simple Latent SDE model
 
 ```julia
 using NeuroDynamics, Lux, LuxCUDA
@@ -45,7 +44,7 @@ hp = Dict("n_states" => 10, "hidden_dim" => 64, "context_dim" => 32, "t_init" =>
 obs_encoder = Recurrent_Encoder(obs_dim, hp["n_states"], hp["context_dim"],  hp["hidden_dim"], hp["t_init"])
 drift =  ModernWilsonCowan(hp["n_states"], ctrl_dim)
 drift_aug = Chain(Dense(hp["n_states"] + hp["context_dim"], hp["hidden_dim"], softplus), Dense(hp["hidden_dim"], hp["n_states"], tanh))
-diffusion = Scale(hp["n_states"], sigmoid)
+diffusion = Dense(hp["n_states"], hp["n_states"], sigmoid)
 dynamics =  SDE(drift, drift_aug, diffusion, EulerHeun(), dt=0.1)
 obs_decoder = MLP_Decoder(hp["n_states"], obs_dim,  hp["hidden_dim"], 1, "Poisson")   
 ctrl_encoder, ctrl_decoder = NoOpLayer(), NoOpLayer()

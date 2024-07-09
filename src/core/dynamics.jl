@@ -11,7 +11,6 @@ Arguments:
   - `kwargs`: Additional keyword arguments to pass to the solver.
 
 """
-
 struct ODE{VF} <: UDE
     vector_field::VF
     solver
@@ -41,7 +40,6 @@ returns:
     - The state of the model.
 
 """
-
 function (de::ODE)(x::AbstractArray, u::Union{Nothing, AbstractArray}, ts::AbstractArray, p::ComponentArray, st::NamedTuple)
     u_cont(t) = interp!(ts, u, t)
     dxdt(x, p, t) = dxdt_u(de.vector_field, x, u_cont(t), t, p, st)[1]
@@ -87,6 +85,50 @@ function sample_dynamics(de::ODE, x̂₀, u, ts, p, st, n_samples)
     return x
 end
 
+
+"""
+    phaseplot(de::ODE, x₀_ranges, u, ts, p, st; kwargs...)
+
+Plots the phase portrait of the ODE model.
+
+Arguments:
+
+  - `de`: The ODE model.
+  - `x₀_ranges`: The initial condition ranges.
+  - `u`: The control input.
+  - `ts`: The time steps.
+  - `p`: The parameters.
+  - `st`: The state of the model.
+  - `kwargs`: Additional keyword arguments for plotting.
+
+"""
+function phaseplot(de::ODE, x₀_ranges, u, ts, p, st; kwargs...)
+    n_dims = length(x₀_ranges[1])
+    u_cont(t) = interp!(ts, u, t)
+    dt = ts[2] - ts[1]
+    @assert n_dims in [2, 3] "The vector field must be 2D or 3D for plotting" 
+    dxdt(x, p, t) = dxdt_u(de.vector_field, x, u_cont(t), t, p, st)[1]
+    ff = ODEFunction{false}(dxdt; tgrad = basic_tgrad)
+    prob = ODEProblem{false}(ff, x₀_ranges, (0.0, dt), p)
+    function prob_func(prob, i, repeat)
+        x0 = collect(prob.u0[i])
+        x0 = reshape(x0, size(x0)..., 1)
+        remake(prob, u0 = x0)
+    end
+
+    ensemble_prob = EnsembleProblem(prob, prob_func = prob_func)
+    sim = solve(ensemble_prob, Euler(), EnsembleThreads(),  dt=dt, trajectories = length(x₀_ranges))
+    data = Array(sim) .|> Float32
+    data = data[:, 1, :, :]
+
+    if n_dims == 2
+        plot_phase_portrait_2d(data; kwargs...)
+    else
+        plot_phase_portrait_3d(data; kwargs...)
+    end
+    
+end
+
 ################################################################################################################################################################
 
 """
@@ -103,7 +145,6 @@ Arguments:
   - `kwargs`: Additional keyword arguments to pass to the solver.
 
 """
-
 struct SDE{D, DA, DI} <: SUDE
     drift::D
     drift_aug::DA
@@ -136,7 +177,6 @@ returns:
     - The solution of the SDE.
     - The state of the model.
 """
-
 function (de::SDE)(x::AbstractArray, u::Union{Nothing, AbstractArray}, c::AbstractArray, ts::AbstractArray, p::ComponentVector, st::NamedTuple)
     #TBD to fix the interpolation
     u_cont1(t) = interp!(ts, u, t)

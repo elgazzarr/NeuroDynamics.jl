@@ -120,44 +120,4 @@ function MLP_Decoder(latent_dim, obs_dim, hidden_dim, n_hidden, noise="Gaussian"
     return Decoder(output_net)
 end
 
-"""
-    MultiDecoder
-
-A MultiDecoder is a function that takes a latent variable and produces multiple outputs (Observations or Control inputs).
-
-Fields:
-
-- `shared_net`: The shared network.
-- `decoders`: The decoders.
-    
-"""
-struct MultiDecoder <: Lux.AbstractExplicitContainerLayer{(:shared_net, :decoders,)}
-    shared_net
-    decoders
-end
-
-"""
-    (model::MultiDecoder)(x::AbstractArray, p::ComponentArray, st::NamedTuple)
-
-The forward pass of the MultiDecoder.
-
-Arguments:
-
-- `x`: The input to the decoder.
-- `p`: The parameters.
-- `st`: The state.
-
-returns:
-
-    - 'ŷ': The Tuple of outputs of the decoders.
-    - 'st': The states of the decoder.
-
-"""
-function(model::MultiDecoder)(x, p, st)
-    x_shared, st_shared = model.shared_net(x, p.shared_net, st.shared_net)
-    ŷ, st_decoder = model.decoders(x_shared, p.decoders, st.decoders) 
-    st = (st_shared, st_decoder)
-    return ŷ, st
-end
-
 

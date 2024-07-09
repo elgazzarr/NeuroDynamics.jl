@@ -2,13 +2,13 @@
 function plot_samples(ŷ, sample_n=1; kwargs...)
     ŷₘ = selectdim(dropmean(ŷ, dims=4), 3, sample_n)
     ŷₛ = selectdim(dropmean(std(ŷ, dims=4), dims=4), 3, sample_n)
-    plot(transpose(ŷₘ), ribbon=transpose(ŷₛ), legend=false, grid=false, alpha=0.2, label=["prediction" nothing])
+    Plots.plot(transpose(ŷₘ), ribbon=transpose(ŷₛ), legend=false, grid=false, alpha=0.2, label=["prediction" nothing])
 end
 
 
 function plot_preds(ys, ŷs, sample_n=1; kwargs...)
     plot_samples(ŷs, sample_n)
-    scatter!(transpose(ys[:,:,sample_n]), label=["ground truth" nothing] , color="green", grid=false, markersize=2)
+    Plots.scatter!(transpose(ys[:,:,sample_n]), label=["ground truth" nothing] , color="green", grid=false, markersize=2)
 end
 
 function plot_ci(y,  ŷₘ, ŷₛ, ci_factor=1.96, sample_n=1)
@@ -23,13 +23,13 @@ function plot_ci(y,  ŷₘ, ŷₛ, ci_factor=1.96, sample_n=1)
     plot!(transpose(up), fillrange=transpose(lb), fillalpha=0.3, label=["95% CI" nothing], lw=0, color="red", grid=false)
 end
 
-function plot_phase_portrait_2d(solution::Array{T, 3}) where T
-    N, T_, B = size(solution)
+function plot_phase_portrait_2d(data; kwargs...)
+    N, T_, B = size(data)
     @assert N == 2 "State size must be 2 for 2D phase portrait"
 
     # Extract initial and next state points
-    X0 = solution[:, 1, :]  # Initial state [N, B]
-    X1 = solution[:, 2, :]  # Next state [N, B]
+    X0 = data[:, 1, :]  # Initial state [N, B]
+    X1 = data[:, 2, :]  # Next state [N, B]
 
     # Compute direction vectors
     us = X1[1, :] .- X0[1, :]
@@ -44,11 +44,11 @@ function plot_phase_portrait_2d(solution::Array{T, 3}) where T
     cmap = :gnuplot
 
     # Create figure and axis
-    fig = Figure(resolution = (600, 400))
-    ax = Axis(fig[1, 1], xlabel = "x", ylabel = "y", aspect = DataAspect())
+    fig = Figure(size = (800, 600))
+    ax = CairoMakie.Axis(fig[1, 1], aspect = DataAspect(), xlabel=nothing, ylabel=nothing)
 
     # Plot arrows
-    arrows!(ax, xs, ys, us, vs, arrowsize = 8, lengthscale = 0.1,
+    arrows!(ax, xs, ys, us, vs, arrowsize = 10, lengthscale = 1.0,
         arrowcolor = strength, linecolor = strength, colormap = cmap)
 
     # Add colorbar
@@ -56,21 +56,22 @@ function plot_phase_portrait_2d(solution::Array{T, 3}) where T
         nsteps = 100, colormap = cmap, ticksize = 15, width = 15, tickalign = 1)
 
     # Set axis limits and aspect ratio
-    limits!(ax, minimum(xs) - 1, maximum(xs) + 1, minimum(ys) - 1, maximum(ys) + 1)
+    limits!(ax, minimum(xs), maximum(xs), minimum(ys), maximum(ys))
     colsize!(fig.layout, 1, Aspect(1, 1.0))
 
-    # Display figure
-    display(fig)
+    return fig
 end
 
 
-function plot_phase_portrait_3d(solution::Array{T, 3}) where T
-    N, T_, B = size(solution)
+using CairoMakie
+
+function plot_phase_portrait_3d(data; kwargs...)
+    N, T_, B = size(data)
     @assert N == 3 "State size must be 3 for 3D phase portrait"
 
     # Extract initial and next state points
-    X0 = solution[:, 1, :]  # Initial state [N, B]
-    X1 = solution[:, 2, :]  # Next state [N, B]
+    X0 = data[:, 1, :]  # Initial state [N, B]
+    X1 = data[:, 2, :]  # Next state [N, B]
 
     # Compute direction vectors
     us = X1[1, :] .- X0[1, :]
@@ -87,31 +88,33 @@ function plot_phase_portrait_3d(solution::Array{T, 3}) where T
     cmap = :gnuplot
 
     # Create figure and axis
-    fig = Figure(resolution = (800, 600))
-    ax = Axis3(fig[1, 1], xlabel = "x", ylabel = "y", zlabel = "z", aspect = DataAspect())
+    fig = Figure(size = (800, 600))
+    ax = CairoMakie.Axis3(fig[1, 1], xlabel = "x", ylabel = "y", zlabel = "z", aspect = (1, 1, 1))
+
+    # Determine colorrange for the arrows
+    colorrange = (minimum(strength), maximum(strength))
 
     # Plot arrows
     for i in 1:B
         arrows!(ax, [xs[i]], [ys[i]], [zs[i]], [us[i]], [vs[i]], [ws[i]],
-            arrowsize = 0.2, lengthscale = 0.1, arrowcolor = strength[i], colormap = cmap)
+            arrowsize = 0.2, lengthscale = 0.1, arrowcolor = strength[i], colormap = cmap, colorrange = colorrange)
     end
 
     # Add colorbar
-    Colorbar(fig[1, 2], limits = (minimum(strength), maximum(strength)),
+    Colorbar(fig[1, 2], limits = colorrange,
         nsteps = 100, colormap = cmap, ticksize = 15, width = 15, tickalign = 1)
 
     # Set axis limits and aspect ratio
-    limits!(ax, minimum(xs) - 1, maximum(xs) + 1, minimum(ys) - 1, maximum(ys) + 1, minimum(zs) - 1, maximum(zs) + 1)
+    limits!(ax, minimum(xs), maximum(xs), minimum(ys), maximum(ys), minimum(zs), maximum(zs))
     colsize!(fig.layout, 1, Aspect(1, 1.0))
 
     # Display figure
     display(fig)
 end
 
-
 function animate_sol(sol, var_index, title, xlabel, ylabel, color)
     animation = @animate for i in 1:length(sol.t)
-        plot(sol.t[1:i], sol[var_index, 1:i],
+        Plots.plot(sol.t[1:i], sol[var_index, 1:i],
              title = title,
              xlabel = xlabel,
              ylabel = ylabel,
@@ -120,41 +123,44 @@ function animate_sol(sol, var_index, title, xlabel, ylabel, color)
              color = color,
              ylim = (minimum(sol[var_index,:]) - 1.0, maximum(sol[var_index,:]) + 1.0))
         # Add scatter point for the most recent point
-        scatter!([sol.t[i]], [sol[var_index, i]], color=:red, markersize=6, legend=:topright)
+        Plots.scatter!([sol.t[i]], [sol[var_index, i]], color=:red, markersize=6, legend=:topright)
     end
     return animation
 end
 
 
-function animate_timeseries(x; kwargs...)
-    base_plot = plot(xlabel="Time", legend=false, xlims=(0, size(x, 2)), grid=false, kwargs...)
-    @animate for j in 1:size(x, 2)
+function animate_timeseries(x; label, ylabel)
+    # Create the base plot with keyword arguments
+    base_plot = Plots.plot(xlabel="Time (ms)", xlims=(0, size(x, 2)), grid=false, ylabel=ylabel)
+    anim = @animate for j in 1:size(x, 2)
         p = deepcopy(base_plot) # Start with a fresh copy of the base plot for each frame
-        plot!(p, transpose(x[1:end, 1:j, 2]), legend=false, lw=2)
+        Plots.plot!(p, transpose(x[1:end, 1:j, 2]), lw=2, label=label)
     end
+    return anim
 end
+
 
 
 function animate_oscillators(z)
     N = Int(size(z, 1) / 2)
     x = z[1:N, :]
     y = z[N+1:end, :]
-    base_plot = plot(xlabel="Re(z)", ylabel="Im(z)", xlims=(-10, 10), ylims=(-10, 10), legend=false)
+    base_plot = Plots.plot(xlabel="Re(z)", ylabel="Im(z)", xlims=(-10, 10), ylims=(-10, 10), legend=false)
     @animate for j in 1:size(x, 2)
         p = deepcopy(base_plot) 
-        plot!(p, transpose(x[1:N, 1:j]), transpose(y[1:N, 1:j]), legend=false, grid=false, lw=1.5, alpha=0.8)
-        scatter!(p, x[1:N, j], y[1:N, j], legend=false)
+        Plots.plot!(p, transpose(x[1:N, 1:j]), transpose(y[1:N, 1:j]), legend=false, grid=false, lw=1.5, alpha=0.8)
+        Plots.scatter!(p, x[1:N, j], y[1:N, j], legend=false)
     end
 end
 
 
 
-"""function animate_spikes(ŷ_out)
-    base_plot = plot(xlabel="Time", ylabel="Spike count", legend=false, xlims=(0, size(ŷ_out, 2)), ylims=(0, 3), grid=false, xticks=false)
+function animate_spikes(ŷ_out)
+    base_plot = Plots.plot(xlabel="Time", ylabel="Spike count", legend=false, xlims=(0, size(ŷ_out, 2)), ylims=(0, 3), grid=false, xticks=false)
     dist = Poisson.(ŷ_out)
     y_poiss = rand.(dist)
-    @gif for j in 1:size(ŷ_out, 2)
+    @animate for j in 1:size(ŷ_out, 2)
         p = deepcopy(base_plot) # Start with a fresh copy of the base plot for each frame
-        plot!(p, transpose(y_poiss[1:end, 1:j, 1]), legend=false)
+        Plots.plot!(p, transpose(y_poiss[1:end, 1:j, 1]), legend=false)
     end
-end"""
+end
