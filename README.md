@@ -5,6 +5,7 @@
 [![Build Status](https://github.com/elgazzarr/NeuroDynamics.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/elgazzarr/NeuroDynamics.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/elgazzarr/NeuroDynamics.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/elgazzarr/NeuroDynamics.jl)
 
+![logo](docs/src/assets/logo.png)
 
 Scalable generative modeling of neural dynamics in Julia.
 
