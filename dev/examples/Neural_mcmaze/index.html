@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Infering neural dynamics in motor cortex · NeuroDynamics.jl</title><meta name="title" content="Infering neural dynamics in motor cortex · NeuroDynamics.jl"/><meta property="og:title" content="Infering neural dynamics in motor cortex · NeuroDynamics.jl"/><meta property="twitter:title" content="Infering neural dynamics in motor cortex · NeuroDynamics.jl"/><meta name="description" content="Documentation for NeuroDynamics.jl."/><meta property="og:description" content="Documentation for NeuroDynamics.jl."/><meta property="twitter:description" content="Documentation for NeuroDynamics.jl."/><meta property="og:url" content="https://elgazzarr.github.io/NeuroDynamics.jl/examples/Neural_mcmaze/"/><meta property="twitter:url" content="https://elgazzarr.github.io/NeuroDynamics.jl/examples/Neural_mcmaze/"/><link rel="canonical" href="https://elgazzarr.github.io/NeuroDynamics.jl/examples/Neural_mcmaze/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/logo.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="NeuroDynamics.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">NeuroDynamics.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../../tutorials/1-setting_up_model/">Setting up a differentiable model</a></li><li><a class="tocitem" href="../../tutorials/2-building_latentUDE/">Constructing a LatentSDE</a></li></ul></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="../Modeling_HodkingHuxely/">Modeling single neuron</a></li><li class="is-active"><a class="tocitem" href>Infering neural dynamics in motor cortex</a><ul class="internal"><li><a class="tocitem" href="#1.-Loading-the-data-and-creating-the-dataloaders"><span>1. Loading the data and creating the dataloaders</span></a></li><li><a class="tocitem" href="#2.-Defining-the-model"><span>2. Defining the model</span></a></li><li><a class="tocitem" href="#3.-Training-the-model"><span>3. Training the model</span></a></li></ul></li><li><a class="tocitem" href="../Joint_mcmaze/">Infering neural and behavioral dynamics in delayed reach task</a></li><li><a class="tocitem" href="../Joint_area2bump/">Infering neural and behavioral dynamics in Area2 during perturbed reach task</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Examples</a></li><li class="is-active"><a href>Infering neural dynamics in motor cortex</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Infering neural dynamics in motor cortex</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/elgazzarr/NeuroDynamics.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/elgazzarr/NeuroDynamics.jl/blob/main/docs/src/examples/Neural_mcmaze.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Infering-neural-dynamics-of-motor-cortex-during-dealyed-reach-task-using-a-latent-SDE"><a class="docs-heading-anchor" href="#Infering-neural-dynamics-of-motor-cortex-during-dealyed-reach-task-using-a-latent-SDE">Infering neural dynamics of motor cortex during dealyed reach task using a latent SDE</a><a id="Infering-neural-dynamics-of-motor-cortex-during-dealyed-reach-task-using-a-latent-SDE-1"></a><a class="docs-heading-anchor-permalink" href="#Infering-neural-dynamics-of-motor-cortex-during-dealyed-reach-task-using-a-latent-SDE" title="Permalink"></a></h1><p>In this example, we will show how to use the latentsde model to infer underlying neural dynamics from single trial spiking recordings of neurons in the dorsal premotor (PMd) and primary motor (M1) cortices. The data is available for download <a href="https://dandiarchive.org/#/dandiset/000128">here</a>.</p><p>Dynamics in the motor cortext are known to be highly autonomus during simple stereotyped tasks, so it can be predictable given an &quot;informative&quot; initial condition even in the absence of stimulus information. </p><pre><code class="language-julia hljs">using Pkg, Revise, Lux, LuxCUDA, Random, DifferentialEquations, SciMLSensitivity, ComponentArrays, Plots, MLUtils, OptimizationOptimisers, LinearAlgebra, Statistics, Printf, PyCall, Distributions, BenchmarkTools, Zygote
+using IterTools: ncycle
+using NeuroDynamics
+np = pyimport(&quot;numpy&quot;);</code></pre><pre><code class="language-julia hljs">device = &quot;cpu&quot;
+const dev = device == &quot;gpu&quot; ? gpu_device() : cpu_device()
+</code></pre><h2 id="1.-Loading-the-data-and-creating-the-dataloaders"><a class="docs-heading-anchor" href="#1.-Loading-the-data-and-creating-the-dataloaders">1. Loading the data and creating the dataloaders</a><a id="1.-Loading-the-data-and-creating-the-dataloaders-1"></a><a class="docs-heading-anchor-permalink" href="#1.-Loading-the-data-and-creating-the-dataloaders" title="Permalink"></a></h2><p>You can prepare the data yourself or use our preprocessed data staright away which is available <a href="https://drive.google.com/file/d/1J9">here</a></p><pre><code class="language-julia hljs">file_path = &quot;/Users/ahmed.elgazzar/Datasets/NLB/mc_maze.npy&quot; # change this to the path of the dataset
+data = np.load(file_path, allow_pickle=true)
+Y = permutedims(get(data[1], &quot;spikes&quot;) , [3, 2, 1]) |&gt; Array{Float32}
+n_neurons , n_timepoints, n_trials = size(Y) 
+ts = range(0, 5.0, length=n_timepoints) |&gt; Array{Float32}
+Y_trainval , Y_test = splitobs(Y; at=0.8)
+Y_train , Y_val = splitobs(Y_trainval; at=0.8);
+train_loader = DataLoader((Y_train, Y_train), batchsize=32, shuffle=true)
+val_loader = DataLoader((Y_val, Y_val), batchsize=16, shuffle=true)
+test_loader = DataLoader((Y_test, Y_test), batchsize=16, shuffle=true);</code></pre><h2 id="2.-Defining-the-model"><a class="docs-heading-anchor" href="#2.-Defining-the-model">2. Defining the model</a><a id="2.-Defining-the-model-1"></a><a class="docs-heading-anchor-permalink" href="#2.-Defining-the-model" title="Permalink"></a></h2><ul><li>We will use a &quot;Recurrent_Encoder&quot; to infer the initial hidden state from a portion of the observations. </li><li>We will use a BlackBox (Neural) SDE with multiplicative noise to model the latent dynamics.</li><li>We will use a decoder with a Poisson likelihood to model the spike counts.</li></ul><pre><code class="language-julia hljs">hp = Dict(&quot;n_states&quot; =&gt; 10, &quot;hidden_dim&quot; =&gt; 64, &quot;context_dim&quot; =&gt; 32, &quot;t_init&quot; =&gt; Int(0.9 * n_timepoints))
+rng = Random.MersenneTwister(2)
+obs_encoder = Recurrent_Encoder(n_neurons, hp[&quot;n_states&quot;], hp[&quot;context_dim&quot;], 32, hp[&quot;t_init&quot;])
+drift =  ModernWilsonCowan(hp[&quot;n_states&quot;], 0)
+drift_aug = Chain(Dense(hp[&quot;n_states&quot;] + hp[&quot;context_dim&quot;], hp[&quot;hidden_dim&quot;], softplus), Dense(hp[&quot;hidden_dim&quot;], hp[&quot;n_states&quot;], tanh))
+diffusion = Scale(hp[&quot;n_states&quot;], sigmoid, init_weight=identity_init(gain=0.1))
+dynamics =  SDE(drift, drift_aug, diffusion, EulerHeun(), saveat=ts, dt=ts[2]-ts[1]) #ODE(drift, Tsit5)
+obs_decoder = MLP_Decoder(hp[&quot;n_states&quot;], n_neurons, 64, 1, &quot;Poisson&quot;)   
+ctrl_encoder, ctrl_decoder = NoOpLayer(), NoOpLayer()
+model = LatentUDE(obs_encoder, ctrl_encoder, dynamics, obs_decoder, ctrl_decoder, dev)
+p, st = Lux.setup(rng, model) .|&gt; dev
+p = p |&gt; ComponentArray{Float32} </code></pre><h2 id="3.-Training-the-model"><a class="docs-heading-anchor" href="#3.-Training-the-model">3. Training the model</a><a id="3.-Training-the-model-1"></a><a class="docs-heading-anchor-permalink" href="#3.-Training-the-model" title="Permalink"></a></h2><p>We will train the model using the AdamW optimizer with a learning rate of 1e-3 for 200 epochs. </p><pre><code class="language-julia hljs">function train(model::LatentUDE, p, st, train_loader, val_loader, epochs, print_every)
+    epoch = 0
+    L = frange_cycle_linear(epochs+1, 0.5f0, 1.0f0, 1, 0.5)
+    losses = []
+    θ_best = nothing
+    best_metric = -Inf
+    @info &quot;Training ....&quot;
+
+    function loss(p, y, _)
+        y, ts_ = y |&gt; dev, ts |&gt; dev
+        ŷ, _, x̂₀, kl_path = model(y, nothing, ts_, p, st)
+        batch_size = size(y)[end]
+        recon_loss = - poisson_loglikelihood(ŷ, y)/batch_size
+        kl_init = kl_normal(x̂₀[1], x̂₀[2])
+        kl_path = mean(kl_path[end,:])
+        kl_loss =  kl_path  +  kl_init
+        l =  recon_loss + L[epoch+1]*kl_loss
+        return l, recon_loss, kl_loss
+    end
+
+
+    callback = function(opt_state, l, recon_loss , kl_loss)
+        θ = opt_state.u
+        push!(losses, l)
+        if length(losses) % length(train_loader) == 0
+            epoch += 1
+        end
+
+        if length(losses) % (length(train_loader)*print_every) == 0
+            @printf(&quot;Current epoch: %d, Loss: %.2f, PoissonLL: %d, KL: %.2f\n&quot;, epoch, losses[end], recon_loss, kl_loss)
+            y, _ = first(val_loader) 
+            ŷ, _, _ = predict(model, y, nothing, ts, θ, st, 20)
+            ŷₘ = dropdims(mean(ŷ, dims=4), dims=4)
+            val_bps = bits_per_spike(ŷₘ, y)
+            @printf(&quot;Validation bits/spike: %.2f\n&quot;, val_bps)
+            if val_bps &gt; best_metric
+                best_metric = val_bps
+                 θ_best = copy(θ)
+                @printf(&quot;Saving best model&quot;)
+            end        
+        end
+        return false
+    end
+
+    adtype = Optimization.AutoZygote()
+    optf = OptimizationFunction((p, _ , y, y_) -&gt; loss(p, y, y_), adtype)
+    optproblem = OptimizationProblem(optf, p)
+    result = Optimization.solve(optproblem, ADAMW(1e-3), ncycle(train_loader, epochs); callback)
+    return model, θ_best
+    
+end
+</code></pre><pre><code class="language-julia hljs">model, θ_best = train(model, θ_best, st, train_loader, val_loader, 100, 10);</code></pre><pre><code class="language-julia hljs">y, _ = first(test_loader)
+sample = 24
+ch = 4
+ŷ, _, x = predict(model, y, nothing, ts, θ_best, st, 20)
+ŷₘ = dropdims(mean(ŷ, dims=4), dims=4)
+ŷₛ = dropdims(std(ŷ, dims=4), dims=4)
+dist = Poisson.(ŷₘ)
+pred_spike = rand.(dist)
+xₘ = dropdims(mean(x, dims=4), dims=4)
+val_bps = bits_per_spike(ŷₘ, y)
+
+p1 = plot(transpose(y[ch:ch,:,sample]), label=&quot;True Spike&quot;, lw=2)
+p2 = plot(transpose(pred_spike[ch:ch,:,sample]), label=&quot;Predicted Spike&quot;, lw=2, color=&quot;red&quot;)
+p3 = plot(transpose(ŷₘ[ch:ch,:,sample]), ribbon=transpose(ŷₛ[ch:ch,:,sample]), label=&quot;Infered rates&quot;, lw=2, color=&quot;green&quot;, yticks=false)
+
+plot(p1, p2,p3, layout=(3,1), size=(800, 400), legend=:topright)
+</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../Modeling_HodkingHuxely/">« Modeling single neuron</a><a class="docs-footer-nextpage" href="../Joint_mcmaze/">Infering neural and behavioral dynamics in delayed reach task »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.5.0 on <span class="colophon-date" title="Wednesday 10 July 2024 03:38">Wednesday 10 July 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

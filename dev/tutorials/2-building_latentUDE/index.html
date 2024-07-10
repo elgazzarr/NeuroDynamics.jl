@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Constructing a LatentSDE · NeuroDynamics.jl</title><meta name="title" content="Constructing a LatentSDE · NeuroDynamics.jl"/><meta property="og:title" content="Constructing a LatentSDE · NeuroDynamics.jl"/><meta property="twitter:title" content="Constructing a LatentSDE · NeuroDynamics.jl"/><meta name="description" content="Documentation for NeuroDynamics.jl."/><meta property="og:description" content="Documentation for NeuroDynamics.jl."/><meta property="twitter:description" content="Documentation for NeuroDynamics.jl."/><meta property="og:url" content="https://elgazzarr.github.io/NeuroDynamics.jl/tutorials/2-building_latentUDE/"/><meta property="twitter:url" content="https://elgazzarr.github.io/NeuroDynamics.jl/tutorials/2-building_latentUDE/"/><link rel="canonical" href="https://elgazzarr.github.io/NeuroDynamics.jl/tutorials/2-building_latentUDE/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/logo.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="NeuroDynamics.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">NeuroDynamics.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../1-setting_up_model/">Setting up a differentiable model</a></li><li class="is-active"><a class="tocitem" href>Constructing a LatentSDE</a></li></ul></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="../../examples/Modeling_HodkingHuxely/">Modeling single neuron</a></li><li><a class="tocitem" href="../../examples/Neural_mcmaze/">Infering neural dynamics in motor cortex</a></li><li><a class="tocitem" href="../../examples/Joint_mcmaze/">Infering neural and behavioral dynamics in delayed reach task</a></li><li><a class="tocitem" href="../../examples/Joint_area2bump/">Infering neural and behavioral dynamics in Area2 during perturbed reach task</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Constructing a LatentSDE</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Constructing a LatentSDE</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/elgazzarr/NeuroDynamics.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/elgazzarr/NeuroDynamics.jl/blob/main/docs/src/tutorials/2-building_latentUDE.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Creating-a-Latent-SDE-with-differentiable-drift-and-diffusion-functions"><a class="docs-heading-anchor" href="#Creating-a-Latent-SDE-with-differentiable-drift-and-diffusion-functions">Creating a Latent SDE with differentiable drift and diffusion functions</a><a id="Creating-a-Latent-SDE-with-differentiable-drift-and-diffusion-functions-1"></a><a class="docs-heading-anchor-permalink" href="#Creating-a-Latent-SDE-with-differentiable-drift-and-diffusion-functions" title="Permalink"></a></h1><pre><code class="language-julia hljs">using NeuroDynamics, Lux, Random, Plots, DifferentialEquations, ComponentArrays</code></pre><p>Below we will create an example forced latent SDE with differentiable drift and diffusion functions.</p><p>For the encoder, we will use a <code>Recurrent_Encoder</code> which will take the input sequence and return the hidden state of the RNN at the last time step. This hidden state will be used as the initial condition for the SDE solver. It will also return a context vector which will be used to condition augmented SDE. </p><p>The generative SDE will be defined with a <code>ModernWilsonCowan</code> drift and a 1 layer network for the diffusion. The augmented SDE will have an MLP for the drift and share the same diffusion with the generative SDE. </p><p>The decoder is an MLP with <code>Poisson</code> noise. </p><pre><code class="language-julia hljs">obs_dim = 100
+ctrl_dim = 10
+dev = cpu_device()
+
+#Hyperparameters
+hp = Dict(&quot;n_states&quot; =&gt; 10, &quot;hidden_dim&quot; =&gt; 64, &quot;context_dim&quot; =&gt; 32, &quot;t_init&quot; =&gt; 50)
+
+#Encoder
+obs_encoder = Recurrent_Encoder(obs_dim, hp[&quot;n_states&quot;], hp[&quot;context_dim&quot;],  hp[&quot;hidden_dim&quot;], hp[&quot;t_init&quot;])
+
+#Dynamics
+drift =  ModernWilsonCowan(hp[&quot;n_states&quot;], ctrl_dim)
+drift_aug = Chain(Dense(hp[&quot;n_states&quot;] + hp[&quot;context_dim&quot;], hp[&quot;hidden_dim&quot;], softplus), Dense(hp[&quot;hidden_dim&quot;], hp[&quot;n_states&quot;], tanh))
+diffusion = Dense(hp[&quot;n_states&quot;], hp[&quot;n_states&quot;],  sigmoid)
+dynamics =  SDE(drift, drift_aug, diffusion, EulerHeun(), dt=0.1)
+
+#Decoder
+obs_decoder = MLP_Decoder(hp[&quot;n_states&quot;], obs_dim,  hp[&quot;hidden_dim&quot;], 1, &quot;Poisson&quot;)   
+
+#Model
+model = LatentUDE(obs_encoder=obs_encoder, dynamics=dynamics, obs_decoder=obs_decoder, device=dev)</code></pre><pre><code class="nohighlight hljs">LatentUDE(
+    obs_encoder = Encoder(
+        linear_net = Dense(100 =&gt; 64),  [90m# 6_464 parameters[39m
+        init_net = Chain(
+            layer_1 = WrappedFunction{:direct_call}(NeuroDynamics.var&quot;#34#37&quot;{Int64}(50)),
+            layer_2 = Recurrence(
+                cell = LSTMCell(64 =&gt; 64),  [90m# 33_024 parameters[39m[90m, plus 1[39m
+            ),
+            layer_3 = BranchLayer(
+                layer_1 = Dense(64 =&gt; 10),  [90m# 650 parameters[39m
+                layer_2 = Dense(64 =&gt; 10, softplus),  [90m# 650 parameters[39m
+            ),
+        ),
+        context_net = Chain(
+            layer_1 = WrappedFunction{:direct_call}(NeuroDynamics.var&quot;#35#38&quot;()),
+            layer_2 = Recurrence(
+                cell = LSTMCell(64 =&gt; 32),  [90m# 12_416 parameters[39m[90m, plus 1[39m
+            ),
+            layer_3 = WrappedFunction{:direct_call}(NeuroDynamics.var&quot;#36#39&quot;()),
+        ),
+    ),
+    ctrl_encoder = NoOpLayer(),
+    dynamics = SDE(
+        drift = ModernWilsonCowan(10, 10, WeightInitializers.ones32, WeightInitializers.glorot_uniform, WeightInitializers.glorot_uniform, WeightInitializers.ones32),  [90m# 220 parameters[39m
+        drift_aug = Chain(
+            layer_1 = Dense(42 =&gt; 64, softplus),  [90m# 2_752 parameters[39m
+            layer_2 = Dense(64 =&gt; 10, tanh_fast),  [90m# 650 parameters[39m
+        ),
+        diffusion = Dense(10 =&gt; 10, sigmoid_fast),  [90m# 110 parameters[39m
+    ),
+    obs_decoder = Decoder(
+        output_net = Chain(
+            layer_1 = Dense(10 =&gt; 64, relu),  [90m# 704 parameters[39m
+            layer_2 = Dense(64 =&gt; 100),  [90m# 6_500 parameters[39m
+            layer_3 = WrappedFunction{:direct_call}(NeuroDynamics.var&quot;#45#47&quot;()),
+        ),
+    ),
+    ctrl_decoder = NoOpLayer(),
+) [90m        # Total: [39m64_140 parameters,
+[90m          #        plus [39m2 states.</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../1-setting_up_model/">« Setting up a differentiable model</a><a class="docs-footer-nextpage" href="../../examples/Modeling_HodkingHuxely/">Modeling single neuron »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.5.0 on <span class="colophon-date" title="Wednesday 10 July 2024 03:38">Wednesday 10 July 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
