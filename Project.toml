@@ -1,0 +1,39 @@
+name = "NeuroDynamics"
+uuid = "ddade9f8-0711-45cc-a88e-9a30bd56782a"
+authors = ["Ahmed El-Gazzar"]
+version = "1.0.0-DEV"
+
+[deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+Boltz = "4544d5e4-abc5-4dea-817f-29e4c205d9c8"
+CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
+ComponentArrays = "b0b7db55-cfe3-40fc-9ded-d10e2dbeff66"
+DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+Interpolations = "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59"
+IterTools = "c8e1da08-722c-5040-9ed9-7db0dc04731e"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Lux = "b2108857-7c20-44ae-9111-449ecde12c47"
+LuxCUDA = "d0bbae9a-e099-4d5b-a835-1c6931763bda"
+LuxCore = "bb33d45b-7691-41d6-9220-0943567d0623"
+MLUtils = "f1d291b0-491e-4a28-83b9-f70985020b54"
+OptimizationOptimisers = "42dfb2eb-d2b4-4451-abcd-913932933ac1"
+Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+SciMLSensitivity = "1ed8b502-d754-442c-8d5d-10ac956f44a1"
+SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
+Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
