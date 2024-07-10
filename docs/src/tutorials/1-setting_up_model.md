@@ -30,6 +30,7 @@ u = nothing
 sol = model(x0, u, ts, p, st)[1]
 plot(sol, idx=[1,2],  xlabel="Time", title="FitzHugh-Nagumo", label=["V" "W"], linewidth=2)
 ```
+![FitzHugh-Nagumo](../assets/fitzhugh_nagumo.png)
 
 We can also plot the phase portrait of the model using the `phaseplot` function.
 
@@ -40,3 +41,4 @@ w_ranges = -3.0:0.1:3.0
 x₀_ranges = collect(product(v_ranges, w_ranges))
 phaseplot(model, x₀_ranges, u, ts, p, st)
 ```
+![FitzHugh-Nagumo](../assets/phase_plot.png)
