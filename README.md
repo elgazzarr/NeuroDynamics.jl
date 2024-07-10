@@ -27,7 +27,7 @@ Pkg.dev("https://github.com/elgazzarr/NeuroDynamics.jl")
 
 ## Tutorials, Examples, and Documentation
 
-For more information, check out the [documentation](https://elgazzarr.github.io/NeuroDynamics.jl/stable/).
+For more information, check out the [documentation](https://elgazzarr.github.io/NeuroDynamics.jl/dev/).
 
 
 ## Example of a simple Latent SDE model
