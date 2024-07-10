@@ -5,7 +5,9 @@
 [![Build Status](https://github.com/elgazzarr/NeuroDynamics.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/elgazzarr/NeuroDynamics.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/elgazzarr/NeuroDynamics.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/elgazzarr/NeuroDynamics.jl)
 
-<img src="docs/src/assets/logo.png" alt="logo" width="200"/>
+<div style="text-align: center;">
+  <img src="docs/src/assets/logo.png" alt="logo" width="200"/>
+</div>
 
 NeuroDynamics.jl is a Julia package for scalable and efficient generative modeling of neural dynamics [[1](https://arxiv.org/abs/2403.14510)].
 Neural systems are modeld as a system of of stochastic differential equations with differentiable drift and diffusion functions.  
