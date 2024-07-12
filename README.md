@@ -13,7 +13,7 @@ NeuroDynamics.jl is a Julia package for scalable and efficient generative modeli
 Neural systems are modeld as a system of of stochastic differential equations with differentiable drift and diffusion functions.  
 The package provides a high-level interface for specifying and fitting these models to neural data using variational inference [[2](https://arxiv.org/abs/2001.01328), [3](https://arxiv.org/abs/1905.09883)] and gradient-based optimization.
 
-## Version 1.0.0-DEV
+## Version 0.1.0-DEV
 
 The pacakage is still in DEV mode but if you can't wait, feel free to use it and report any issues you encounter.
 
