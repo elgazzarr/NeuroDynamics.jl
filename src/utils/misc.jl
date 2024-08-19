@@ -11,7 +11,11 @@ returns:
 
     - The sampled value.
 """
-sample_rp(x::Tuple) = x[1] + randn(size(x[1])...) .* sqrt.(x[2])
+function sample_rp(x::Tuple{AbstractArray, AbstractArray})
+    return x[1] + rand!(x[1]) .* sqrt.(x[2])
+end
+
+
 sample_rp(x::AbstractArray) = x
 sample_rp(x::AbstractFloat) = x
 
@@ -33,9 +37,10 @@ returns:
     - The interpolated control signal.
 
 """
+
 function interp!(ts, cs::AbstractArray, time_point)
     # Use a generator to create interpolations and yield results
-    return Zygote.@ignore [LinearInterpolation(ts, cs[i, :, j])(time_point) for i in 1:size(cs, 1), j in 1:size(cs, 3)]
+   CUDA.@allowscalar return Zygote.@ignore [LinearInterpolation(ts, cs[i, :, j])(time_point) for i in 1:size(cs, 1), j in 1:size(cs, 3)]
 end
 
 function interp!(ts, cs::Nothing, time_point)

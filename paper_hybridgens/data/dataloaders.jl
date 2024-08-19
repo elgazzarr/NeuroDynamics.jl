@@ -19,7 +19,8 @@ function prepare_dataloaders(dataset_name, dev; batch_size=128, augment_time=fal
     U, Y_neural, Y_behaviour = map(x -> x |> Array{Float32}, (U, Y_neural, Y_behaviour))
     ts = ts |> Array{Float32}
     
-    (u_train, y_train, b_train), (u_val, y_val, b_val) = splitobs((U, Y_neural, Y_behaviour); at=0.85)    
+    split_ = dataset_name == "mc_maze" ? 0.9 : 0.8
+    (u_train, y_train, b_train), (u_val, y_val, b_val) = splitobs((U, Y_neural, Y_behaviour); at=split_)    
     train_loader = DataLoader((u_train, y_train, b_train), batchsize=batch_size, shuffle=true)
     val_loader = DataLoader((u_val, y_val, b_val), batchsize=32, shuffle=true)
     dims = (n_neurons = n_neurons, n_behaviour = n_behaviour, n_stimuli = n_stimuli, n_timepoints = n_timepoints, n_trials = n_trials)

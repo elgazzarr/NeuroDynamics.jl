@@ -36,9 +36,9 @@ returns:
 
 """
 function(model::Encoder)(x, p, st)
-    x, st1 = model.linear_net(x, p.linear_net, st.linear_net)
-    x̂₀, st2 = model.init_net(x, p.init_net, st.init_net)
-    context, st3 = model.context_net(x, p.context_net, st.context_net)
+    x_, st1 = model.linear_net(x, p.linear_net, st.linear_net)
+    x̂₀, st2 = model.init_net(x_, p.init_net, st.init_net)
+    context, st3 = model.context_net(x_, p.context_net, st.context_net)
     st = (st1, st2, st3)
     return (x̂₀, context), st
 end
@@ -69,14 +69,14 @@ Arguments:
 - `latent_dim`: Dimension of the latent space.
 - `context_dim`: Dimension of the context.
 - `hidden_dim`: Dimension of the hidden state.
-- `t_init`: Number of initial time steps to use for the initial hidden state.
+- `t_init`: Ratio of the sequence length to be used for infering the initial hidden state.
 
 """
 function Recurrent_Encoder(obs_dim, latent_dim, context_dim, hidden_dim, t_init)
     linear_net = Dense(obs_dim => hidden_dim)
     init_net = Chain(
-                    x -> reverse(x[:,1:t_init,:], dims=2),
-                    Recurrence(LSTMCell(hidden_dim=>hidden_dim)),
+                    x -> reverse(x[:,1:trunc(Int, t_init*size(x,2)),:], dims=2),
+                    Recurrence(LSTMCell(hidden_dim=>hidden_dim)), 
                     BranchLayer(Dense(hidden_dim => latent_dim), Dense(hidden_dim => latent_dim, softplus)))
     
     if context_dim == 0

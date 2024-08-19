@@ -5,3 +5,11 @@
 /docs/Manifest.toml
 /docs/build/
 .vscode/
+.CondaPkg/
+wandb/
+paper_hybridgens/figures/
+paper_hybridgens/results/
+paper_hybridgens/experiments/
+paper_hybridgens/scripts/
+paper_hybridgens/wandb/
+

@@ -129,12 +129,12 @@ function animate_sol(sol, var_index, title, xlabel, ylabel, color)
 end
 
 
-function animate_timeseries(x; label, ylabel)
+function animate_timeseries(x; kwargs...)
     # Create the base plot with keyword arguments
-    base_plot = Plots.plot(xlabel="Time (ms)", xlims=(0, size(x, 2)), grid=false, ylabel=ylabel)
+    base_plot = Plots.plot(xlabel="Time (ms)", xlims=(0, size(x, 2)), grid=false)
     anim = @animate for j in 1:size(x, 2)
         p = deepcopy(base_plot) # Start with a fresh copy of the base plot for each frame
-        Plots.plot!(p, transpose(x[1:end, 1:j, 2]), lw=2, label=label)
+        Plots.plot!(p, transpose(x[1:end, 1:j, 2]), lw=2; kwargs...)
     end
     return anim
 end

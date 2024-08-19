@@ -147,11 +147,64 @@ Lux.statelength(::ModernWilsonCowan) = 0
 
 
 function (m::ModernWilsonCowan)(x, u::AbstractArray, t, p, st) 
-    dx = (-x + p.J * tanh.(x) + p.B * u .+ p.b)./(p.τ .+ 1e-3)
+    dx = (-x + p.J * tanh.(x) + p.B * u .+ p.b)./(p.τ .+ 0.001f0)
     return dx, st
 end
 
 function (m::ModernWilsonCowan)(x, u::Nothing, t, p, st)
-    dx = (-x + p.J * tanh.(x) .+ p.b)./(p.τ .+ 1e-3)
+    dx = (-x + p.J * tanh.(x) .+ p.b)./(p.τ .+ 0.001f0)
+    return dx, st
+end
+
+
+
+##########################################
+
+
+struct JansenRit{F1, F2, F3, F4, F5, F6, F7} <: DynamicalSystem
+    N::Int              # Number of populations (fixed at 6)
+    M::Int              # Input size
+    α::F1               # Parameter α
+    β::F2               # Parameter β
+    C1::F3              # Coupling parameter C1
+    C2::F4              # Coupling parameter C2
+    C3::F5              # Coupling parameter C3
+    C4::F6              # Coupling parameter C4
+    C5::F7              # Coupling parameter C5
+end
+
+function JansenRit(M::Int; α=5.0f0, β=20.0f0, C1=135.0f0, C2=108.0f0, C3=33.75f0, C4=33.75f0, C5=108.0f0)
+    N = 6
+    return JansenRit(N, M, [α], [β], [C1], [C2], [C3], [C4], [C5])
+end
+
+function Lux.initialparameters(rng::AbstractRNG, j::JansenRit)
+    α = j.α
+    β = j.β
+    C1 = j.C1
+    C2 = j.C2
+    C3 = j.C3
+    C4 = j.C4
+    C5 = j.C5
+    return (α=α, β=β, C1=C1, C2=C2, C3=C3, C4=C4, C5=C5)
+end
+
+Lux.initialstates(::AbstractRNG, ::JansenRit) = NamedTuple()
+
+Lux.parameterlength(j::JansenRit) = 7  # α, β, C1, C2, C3, C4, C5 each in 1x1 array
+Lux.statelength(::JansenRit) = 6
+
+function (j::JansenRit)(x, u, t, p, st)
+    @unpack α, β, C1, C2, C3, C4, C5 = p
+        
+    y = reshape(x[1:3], 3)
+    dy = reshape(x[4:6], 3)
+    
+    ddy0 = α^2 .* (C2 .* tanh.(y[2] .- y[3]) .+ C5 .* u[1]) .- 2 .* α .* dy[1] .- α^2 .* y[1]
+    ddy1 = β^2 .* (C4 .* tanh.(C3 .* y[1])) .- 2 .* β .* dy[2] .- β^2 .* y[2]
+    ddy2 = β^2 .* (C1 .* tanh.(C3 .* y[1])) .- 2 .* β .* dy[3] .- β^2 .* y[3]
+    
+    dx = vcat(dy, [ddy0, ddy1, ddy2])
+    
     return dx, st
 end

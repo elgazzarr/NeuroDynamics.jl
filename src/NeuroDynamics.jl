@@ -1,11 +1,11 @@
 module NeuroDynamics
 
-using Lux, ComponentArrays, LinearAlgebra, SciMLSensitivity, Plots, Zygote, Distributions, Interpolations, SpecialFunctions, DifferentialEquations, Random, CairoMakie
+using Lux, ComponentArrays, LinearAlgebra, SciMLSensitivity, Plots, Zygote, Distributions, Interpolations, SpecialFunctions, DifferentialEquations, Random, CairoMakie, CUDA
 import ChainRulesCore as CRC
 using Parameters: @unpack, @with_kw
 import LuxCore: AbstractExplicitContainerLayer, AbstractExplicitLayer
 
-abstract type LatentVariableModel <: AbstractExplicitContainerLayer{(:obs_encoder, :ctrl_encoder, :dynamics, :obs_decoder, :ctrl_decoder)} end
+abstract type LatentVariableModel <: AbstractExplicitContainerLayer{(:obs_encoder, :ctrl_encoder, :init_map, :dynamics, :obs_decoder, :ctrl_decoder)} end
 abstract type  DynamicalSystem <: AbstractExplicitLayer end
 abstract type UDE <: AbstractExplicitContainerLayer{(:vector_field,)} end
 abstract type SUDE <: AbstractExplicitContainerLayer{(:drift, :drift_aug, :diffusion)} end
@@ -31,12 +31,13 @@ include("utils/losses.jl")
 export kl_normal, poisson_loglikelihood, normal_loglikelihood, mse, frange_cycle_linear, bits_per_spike
 
 # Models
-include("models/oscillators.jl")
-export HarmonicOscillators, BistableOscillators
-include("models/neural_populations.jl")
-export WilsonCowan, ModernWilsonCowan
-include("models/single_neuron.jl")
-export FitzHughNagumo, HodgkinHuxley
+#include("models/oscillators.jl")
+#export HarmonicOscillators, BistableOscillators
+#include("models/neural_populations.jl")
+#export WilsonCowan, ModernWilsonCowan
+#include("models/single_neuron.jl")
+#export FitzHughNagumo, HodgkinHuxley
+
 end
 
 
