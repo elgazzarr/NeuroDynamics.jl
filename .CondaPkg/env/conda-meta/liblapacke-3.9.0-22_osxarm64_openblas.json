@@ -1,0 +1,55 @@
+{
+    "arch": "arm64",
+    "build": "22_osxarm64_openblas",
+    "build_number": 22,
+    "build_string": "22_osxarm64_openblas",
+    "channel": "https://conda.anaconda.org/conda-forge/osx-arm64",
+    "constrains": [
+        "blas * openblas"
+    ],
+    "depends": [
+        "libblas 3.9.0 22_osxarm64_openblas",
+        "libcblas 3.9.0 22_osxarm64_openblas",
+        "liblapack 3.9.0 22_osxarm64_openblas"
+    ],
+    "extracted_package_dir": "/Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root/pkgs/liblapacke-3.9.0-22_osxarm64_openblas",
+    "files": [
+        "lib/liblapacke.3.dylib",
+        "lib/liblapacke.dylib"
+    ],
+    "fn": "liblapacke-3.9.0-22_osxarm64_openblas.conda",
+    "license": "BSD-3-Clause",
+    "link": {
+        "source": "/Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root/pkgs/liblapacke-3.9.0-22_osxarm64_openblas",
+        "type": 1
+    },
+    "md5": "cb2da058b4e05a619f0cf261086e1d82",
+    "name": "liblapacke",
+    "package_tarball_full_path": "/Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root/pkgs/liblapacke-3.9.0-22_osxarm64_openblas.tar.bz2",
+    "paths_data": {
+        "paths": [
+            {
+                "_path": "lib/liblapacke.3.dylib",
+                "path_type": "softlink",
+                "sha256_in_prefix": "749b50a2d7936991aa08218856c36fd9d464acad78192d53be0683b83794f849",
+                "size_in_bytes": 10493664
+            },
+            {
+                "_path": "lib/liblapacke.dylib",
+                "path_type": "softlink",
+                "sha256_in_prefix": "749b50a2d7936991aa08218856c36fd9d464acad78192d53be0683b83794f849",
+                "size_in_bytes": 10493664
+            }
+        ],
+        "paths_version": 1
+    },
+    "platform": "osx",
+    "requested_spec": "",
+    "sha256": "88868c5864fe9ca636335ab449a3c8b3a7273836722d2dcae778d2e47705a857",
+    "size": 14743,
+    "subdir": "osx-arm64",
+    "timestamp": 1712542448005,
+    "track_features": "",
+    "url": "https://conda.anaconda.org/conda-forge/osx-arm64/liblapacke-3.9.0-22_osxarm64_openblas.conda",
+    "version": "3.9.0"
+}

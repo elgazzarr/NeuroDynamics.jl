@@ -73,7 +73,7 @@ Arguments:
 
 """
 function Recurrent_Encoder(obs_dim, latent_dim, context_dim, hidden_dim, t_init)
-    linear_net = Dense(obs_dim => hidden_dim)
+    linear_net = Dense(obs_dim => hidden_dim, tanh)
     init_net = Chain(
                     x -> reverse(x[:,1:t_init,:], dims=2),
                     Recurrence(LSTMCell(hidden_dim=>hidden_dim)),

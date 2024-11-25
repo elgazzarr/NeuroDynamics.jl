@@ -1,0 +1,40 @@
+{
+    "arch": "arm64",
+    "build": "py311he598dae_0",
+    "build_number": 0,
+    "build_string": "py311he598dae_0",
+    "channel": "https://conda.anaconda.org/anaconda/osx-arm64",
+    "constrains": [],
+    "depends": [
+        "blas * openblas",
+        "libcxx >=14.0.6",
+        "libopenblas >=0.3.21,<1.0a0",
+        "numpy-base 1.26.0 py311hfbfe69c_0",
+        "python >=3.11,<3.12.0a0"
+    ],
+    "extracted_package_dir": "/Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root/pkgs/numpy-1.26.0-py311he598dae_0",
+    "files": [],
+    "fn": "numpy-1.26.0-py311he598dae_0.tar.bz2",
+    "license": "BSD-3-Clause",
+    "license_family": "BSD",
+    "link": {
+        "source": "/Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root/pkgs/numpy-1.26.0-py311he598dae_0",
+        "type": 1
+    },
+    "md5": "e95b7e8efe33001552320175afa8479e",
+    "name": "numpy",
+    "package_tarball_full_path": "/Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root/pkgs/numpy-1.26.0-py311he598dae_0.tar.bz2",
+    "paths_data": {
+        "paths": [],
+        "paths_version": 1
+    },
+    "platform": "osx",
+    "requested_spec": "numpy=*",
+    "sha256": "dfc3ea5bde9bf95b7759eda9e665bcfd99cf732caf60c4bd9d8d680d1bcfd13e",
+    "size": 10388,
+    "subdir": "osx-arm64",
+    "timestamp": 1695830874537,
+    "track_features": "",
+    "url": "https://conda.anaconda.org/anaconda/osx-arm64/numpy-1.26.0-py311he598dae_0.tar.bz2",
+    "version": "1.26.0"
+}

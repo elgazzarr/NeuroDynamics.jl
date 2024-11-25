@@ -1,0 +1,15 @@
+libdir=/Users/ahmed.elgazzar/Code/MyPackages/NeuroDynamics/NeuroDynamics/.CondaPkg/env/lib
+libprefix=
+libnamesuffix=
+libsuffix=
+includedir=/Users/ahmed.elgazzar/Code/MyPackages/NeuroDynamics/NeuroDynamics/.CondaPkg/env/include
+openblas_config= USE_64BITINT=0 DYNAMIC_ARCH=0 DYNAMIC_OLDER= NO_CBLAS= NO_LAPACK=0 NO_LAPACKE= NO_AFFINITY=1 USE_OPENMP=1 VORTEX MAX_THREADS=128
+version=0.3.27
+extralib=-lpthread -lgfortran -lpthread -lgfortran -lgomp
+Name: openblas
+Description: OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version
+Version: ${version}
+URL: https://github.com/xianyi/OpenBLAS
+Libs: -L${libdir} -l${libprefix}openblas${libnamesuffix}
+Libs.private: ${extralib}
+Cflags: -I${includedir}

@@ -1,0 +1,94 @@
+{
+    "arch": "arm64",
+    "build": "hde57baf_0",
+    "build_number": 0,
+    "build_string": "hde57baf_0",
+    "channel": "https://conda.anaconda.org/conda-forge/osx-arm64",
+    "constrains": [
+        "openmp 18.1.8|18.1.8.*"
+    ],
+    "depends": [
+        "__osx >=11.0"
+    ],
+    "extracted_package_dir": "/Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root/pkgs/llvm-openmp-18.1.8-hde57baf_0",
+    "files": [
+        "include/omp-tools.h",
+        "include/omp.h",
+        "include/ompt.h",
+        "include/ompx.h",
+        "lib/clang/18.1.8/include/omp.h",
+        "lib/libiomp5.dylib",
+        "lib/libomp.dylib"
+    ],
+    "fn": "llvm-openmp-18.1.8-hde57baf_0.conda",
+    "license": "Apache-2.0 WITH LLVM-exception",
+    "link": {
+        "source": "/Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root/pkgs/llvm-openmp-18.1.8-hde57baf_0",
+        "type": 1
+    },
+    "md5": "82393fdbe38448d878a8848b6fcbcefb",
+    "name": "llvm-openmp",
+    "package_tarball_full_path": "/Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root/pkgs/llvm-openmp-18.1.8-hde57baf_0.tar.bz2",
+    "paths_data": {
+        "paths": [
+            {
+                "_path": "include/omp-tools.h",
+                "path_type": "hardlink",
+                "sha256": "fa06b3089702db0d2dc5900caab6d93b2e5e0fd56295b65bf7611c436c72bff7",
+                "sha256_in_prefix": "fa06b3089702db0d2dc5900caab6d93b2e5e0fd56295b65bf7611c436c72bff7",
+                "size_in_bytes": 51555
+            },
+            {
+                "_path": "include/omp.h",
+                "path_type": "hardlink",
+                "sha256": "9ef85ad278e06954e97326ca6c515aa91f86f05cd54608a531a136a571174bd6",
+                "sha256_in_prefix": "9ef85ad278e06954e97326ca6c515aa91f86f05cd54608a531a136a571174bd6",
+                "size_in_bytes": 23818
+            },
+            {
+                "_path": "include/ompt.h",
+                "path_type": "hardlink",
+                "sha256": "fa06b3089702db0d2dc5900caab6d93b2e5e0fd56295b65bf7611c436c72bff7",
+                "sha256_in_prefix": "fa06b3089702db0d2dc5900caab6d93b2e5e0fd56295b65bf7611c436c72bff7",
+                "size_in_bytes": 51555
+            },
+            {
+                "_path": "include/ompx.h",
+                "path_type": "hardlink",
+                "sha256": "555e94eb0632b9dd448d0e757e8763b9af2e074b728e93576ed6ce80d1170c25",
+                "sha256_in_prefix": "555e94eb0632b9dd448d0e757e8763b9af2e074b728e93576ed6ce80d1170c25",
+                "size_in_bytes": 5326
+            },
+            {
+                "_path": "lib/clang/18.1.8/include/omp.h",
+                "path_type": "hardlink",
+                "sha256": "9ef85ad278e06954e97326ca6c515aa91f86f05cd54608a531a136a571174bd6",
+                "sha256_in_prefix": "9ef85ad278e06954e97326ca6c515aa91f86f05cd54608a531a136a571174bd6",
+                "size_in_bytes": 23818
+            },
+            {
+                "_path": "lib/libiomp5.dylib",
+                "path_type": "softlink",
+                "sha256_in_prefix": "9f31a40bd1e358cd447aa5adb2e480fdcf5278e58189123480cf6f9a07d85e40",
+                "size_in_bytes": 824512
+            },
+            {
+                "_path": "lib/libomp.dylib",
+                "path_type": "hardlink",
+                "sha256": "9f31a40bd1e358cd447aa5adb2e480fdcf5278e58189123480cf6f9a07d85e40",
+                "sha256_in_prefix": "9f31a40bd1e358cd447aa5adb2e480fdcf5278e58189123480cf6f9a07d85e40",
+                "size_in_bytes": 824512
+            }
+        ],
+        "paths_version": 1
+    },
+    "platform": "osx",
+    "requested_spec": "",
+    "sha256": "42bc913b3c91934a1ce7ff635e87ee48e2e252632f0cbf607c5a3e4409d9f9dd",
+    "size": 276438,
+    "subdir": "osx-arm64",
+    "timestamp": 1718911793488,
+    "track_features": "",
+    "url": "https://conda.anaconda.org/conda-forge/osx-arm64/llvm-openmp-18.1.8-hde57baf_0.conda",
+    "version": "18.1.8"
+}

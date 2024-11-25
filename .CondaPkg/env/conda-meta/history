@@ -1,0 +1,50 @@
+==> 2024-07-16 22:26:15 <==
+# cmd: /Users/ahmed.elgazzar/.julia/artifacts/98aba21a6802e06a5d2e7c48633d7dc1c3d4a749/bin/micromamba -r /Users/ahmed.elgazzar/.julia/scratchspaces/0b3b1443-0f03-428d-bdfb-f27f9c1191ea/root create -y -p /Users/ahmed.elgazzar/Code/MyPackages/NeuroDynamics/NeuroDynamics/.CondaPkg/env --override-channels --no-channel-priority numpy[version='*'] pillow[version='*'] pip[version='>=22.0.0'] protobuf[version='>=3'] python[version='>=3.8,<4',channel='anaconda'] python[version='>=3.4,<4'] python[version='>=3.9'] -c anaconda -c conda-forge
+# conda version: 3.8.0
++https://conda.anaconda.org/anaconda/osx-arm64::xz-5.4.2-h80987f9_0
++https://conda.anaconda.org/anaconda/osx-arm64::libffi-3.4.4-hca03da5_0
++https://conda.anaconda.org/anaconda/osx-arm64::libdeflate-1.17-h80987f9_1
++https://conda.anaconda.org/conda-forge/osx-arm64::bzip2-1.0.8-h99b78c6_7
++https://conda.anaconda.org/conda-forge/osx-arm64::ncurses-6.5-hb89a1cb_0
++https://conda.anaconda.org/conda-forge/osx-arm64::libzlib-1.2.13-hfb2fe0b_6
++https://conda.anaconda.org/conda-forge/osx-arm64::libcxx-18.1.8-h167917d_0
++https://conda.anaconda.org/conda-forge/osx-arm64::jpeg-9e-h1a8c8d9_3
++https://conda.anaconda.org/conda-forge/osx-arm64::libwebp-base-1.3.2-h93a5062_1
++https://conda.anaconda.org/conda-forge/osx-arm64::giflib-5.2.2-h93a5062_0
++https://conda.anaconda.org/conda-forge/osx-arm64::ca-certificates-2024.7.4-hf0a4a13_0
++https://conda.anaconda.org/conda-forge/osx-arm64::llvm-openmp-18.1.8-hde57baf_0
++https://conda.anaconda.org/conda-forge/osx-arm64::readline-8.2-h92ec313_1
++https://conda.anaconda.org/conda-forge/osx-arm64::zstd-1.5.6-hb46c0d2_0
++https://conda.anaconda.org/conda-forge/osx-arm64::libpng-1.6.43-h091b4b1_0
++https://conda.anaconda.org/conda-forge/osx-arm64::zlib-1.2.13-hfb2fe0b_6
++https://conda.anaconda.org/conda-forge/osx-arm64::tk-8.6.13-h5083fa2_1
++https://conda.anaconda.org/conda-forge/osx-arm64::libsqlite-3.46.0-hfb93653_0
++https://conda.anaconda.org/conda-forge/osx-arm64::libprotobuf-3.20.3-hb5ab8b9_0
++https://conda.anaconda.org/conda-forge/osx-arm64::openssl-3.3.1-hfb2fe0b_1
++https://conda.anaconda.org/conda-forge/osx-arm64::libgfortran5-13.2.0-hf226fd6_3
++https://conda.anaconda.org/conda-forge/osx-arm64::freetype-2.12.1-hadb7bae_2
++https://conda.anaconda.org/conda-forge/osx-arm64::sqlite-3.46.0-h5838104_0
++https://conda.anaconda.org/conda-forge/osx-arm64::libgfortran-5.0.0-13_2_0_hd922786_3
++https://conda.anaconda.org/conda-forge/osx-arm64::libopenblas-0.3.27-openmp_h517c56d_1
++https://conda.anaconda.org/conda-forge/osx-arm64::openblas-0.3.27-openmp_h560b219_1
++https://conda.anaconda.org/conda-forge/osx-arm64::libblas-3.9.0-22_osxarm64_openblas
++https://conda.anaconda.org/conda-forge/osx-arm64::liblapack-3.9.0-22_osxarm64_openblas
++https://conda.anaconda.org/conda-forge/osx-arm64::libcblas-3.9.0-22_osxarm64_openblas
++https://conda.anaconda.org/conda-forge/osx-arm64::liblapacke-3.9.0-22_osxarm64_openblas
++https://conda.anaconda.org/conda-forge/osx-arm64::blas-devel-3.9.0-22_osxarm64_openblas
++https://conda.anaconda.org/conda-forge/osx-arm64::blas-2.122-openblas
++https://conda.anaconda.org/conda-forge/noarch::tzdata-2024a-h0c530f3_0
++https://conda.anaconda.org/anaconda/osx-arm64::lerc-3.0-hc377ac9_0
++https://conda.anaconda.org/anaconda/osx-arm64::python-3.11.5-hb885b13_0
++https://conda.anaconda.org/anaconda/osx-arm64::libtiff-4.5.1-h313beb8_0
++https://conda.anaconda.org/anaconda/osx-arm64::libwebp-1.3.2-ha3663a8_0
++https://conda.anaconda.org/conda-forge/noarch::wheel-0.43.0-pyhd8ed1ab_1
++https://conda.anaconda.org/conda-forge/noarch::setuptools-70.3.0-pyhd8ed1ab_0
++https://conda.anaconda.org/conda-forge/noarch::pip-24.0-pyhd8ed1ab_0
++https://conda.anaconda.org/conda-forge/osx-arm64::openjpeg-2.5.0-hbc2ba62_2
++https://conda.anaconda.org/conda-forge/osx-arm64::lcms2-2.15-h481adae_0
++https://conda.anaconda.org/anaconda/osx-arm64::protobuf-3.20.3-py311h313beb8_0
++https://conda.anaconda.org/anaconda/osx-arm64::numpy-base-1.26.0-py311hfbfe69c_0
++https://conda.anaconda.org/anaconda/osx-arm64::pillow-10.0.1-py311h3b245a6_0
++https://conda.anaconda.org/anaconda/osx-arm64::numpy-1.26.0-py311he598dae_0
+# update specs: ["numpy=*", "pillow=*", "pip[version='>=22.0.0']", "protobuf[version='>=3']", "anaconda::python[version='>=3.8,<4']", "python[version='>=3.4,<4']", "python[version='>=3.9']"]
