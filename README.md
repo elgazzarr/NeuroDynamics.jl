@@ -23,7 +23,7 @@ The dev version can be installed by running the following command in the Julia R
 
 ```julia
 using Pkg
-Pkg.dev("https://github.com/elgazzarr/NeuroDynamics.jl")
+Pkg.add(url="https://github.com/elgazzarr/NeuroDynamics.jl")
 ```
 
 ## Tutorials, Examples, and Documentation
