@@ -138,3 +138,106 @@ end
 
 
 
+
+
+###################################################################################
+"""
+    CoupledOscillators(N::Int, M::Int; hidden_dim=16, init_alpha=Lux.rand32, init_omega=Lux.rand32)
+
+Drift of the coupled-oscillator latent SDE/ODE (CO-SDE / CO-ODE) from
+ElGazzar & van Gerven, *Generative Modeling of Neural Dynamics via Latent SDEs*
+(arXiv:2412.12112), Eqs. (8)–(9).
+
+The latent state of `N` oscillators is `x = vcat(a, b)` with length `2N`, where `a` holds the real
+parts and `b` the imaginary parts. Batches are stored as columns, the same layout as
+`BistableOscillators`. Each oscillator is a Hopf normal form whose growth rate is modulated
+by a scalar, input-dependent coupling κ(u):
+
+```math
+\\begin{aligned}
+\\frac{da}{dt} &= \\alpha a - \\omega b - (a^2 + b^2)\\, a + \\kappa(u)\\, a \\\\
+\\frac{db}{dt} &= \\omega a + \\alpha b - (a^2 + b^2)\\, b + \\kappa(u)\\, b
+\\end{aligned}
+```
+
+All operations are element-wise. κ(u) multiplies each oscillator's own state, and the model has no
+pairwise cross-oscillator term. One κ value is computed for each batch column and shared by all
+oscillators.
+
+# Arguments
+- `N`: Number of oscillators. The state dimension is `2N`.
+- `M`: Dimension of the (encoded) input `u`.
+- `hidden_dim`: Hidden width of the κ network (default 16).
+- `init_alpha`, `init_omega`: Initialisers for the per-oscillator bifurcation parameters α (`N×1`)
+  and natural frequencies ω (`N×1`).
+
+# Parameters
+- `α`: Bifurcation parameters (`N×1`).
+- `ω`: Natural frequencies (`N×1`).
+- `kappa`: Parameters of the coupling network `κ: ℝᴹ → ℝ`,
+  `Chain(Dense(M => hidden_dim, tanh), Dense(hidden_dim => 1))`.
+
+If `u === nothing`, κ = 0 and the drift reduces to `N` uncoupled Hopf oscillators.
+
+# Example
+```julia
+drift = CoupledOscillators(8, n_control)                  # 8 oscillators → 16 latent states
+diffusion = Scale(16, sigmoid)
+dynamics = SDE(drift, drift_aug, diffusion, EulerHeun(); saveat=ts, dt=ts[2]-ts[1])
+```
+"""
+struct CoupledOscillators{K, F1, F2} <: AbstractExplicitContainerLayer{(:kappa,)}
+    N::Int          # Number of oscillators
+    M::Int          # Input dimension
+    kappa::K        # Input-dependent scalar coupling κ(u)
+    init_alpha::F1  # Initialiser for the bifurcation parameters α
+    init_omega::F2  # Initialiser for the natural frequencies ω
+end
+
+function CoupledOscillators(N::Int, M::Int; hidden_dim::Int=16, init_alpha=Lux.rand32, init_omega=Lux.rand32)
+    kappa = Chain(Dense(M => hidden_dim, tanh), Dense(hidden_dim => 1))
+    return CoupledOscillators(N, M, kappa, init_alpha, init_omega)
+end
+
+function Lux.initialparameters(rng::AbstractRNG, l::CoupledOscillators)
+    α = l.init_alpha(rng, l.N, 1)
+    ω = l.init_omega(rng, l.N, 1)
+    kappa = Lux.initialparameters(rng, l.kappa)
+    return (α=α, ω=ω, kappa=kappa)
+end
+
+# Lux unwraps the states of single-layer containers; keep them under `kappa` to mirror the parameters.
+Lux.initialstates(rng::AbstractRNG, l::CoupledOscillators) = (kappa=Lux.initialstates(rng, l.kappa),)
+
+Lux.parameterlength(l::CoupledOscillators) = 2 * l.N + Lux.parameterlength(l.kappa)
+Lux.statelength(l::CoupledOscillators) = Lux.statelength(l.kappa)
+
+# The Hopf normal form shared by both methods, plus an optional coupling term κ .* (a, b).
+function _hopf_drift(a, b, α, ω)
+    r² = a .^ 2 .+ b .^ 2
+    da = α .* a .- ω .* b .- r² .* a
+    db = ω .* a .+ α .* b .- r² .* b
+    return da, db
+end
+
+function (l::CoupledOscillators)(x, u::AbstractArray, t, p, st)
+    N = l.N
+    a = x[1:N, :]
+    b = x[N+1:2N, :]
+    κ, st_kappa = l.kappa(u, p.kappa, st.kappa)   # 1 × batch
+    da, db = _hopf_drift(a, b, p.α, p.ω)
+    return vcat(da .+ κ .* a, db .+ κ .* b), merge(st, (kappa=st_kappa,))
+end
+
+function (l::CoupledOscillators)(x, u::Nothing, t, p, st)
+    N = l.N
+    a = x[1:N, :]
+    b = x[N+1:2N, :]
+    da, db = _hopf_drift(a, b, p.α, p.ω)
+    return vcat(da, db), st
+end
+
+# CoupledOscillators is a Lux container layer, not a `DynamicalSystem`, so it needs its own
+# `dxdt_u` methods to get (x, u) separately instead of vcat(x, u).
+dxdt_u(model::CoupledOscillators, x, u, t, p, st) = model(x, u, t, p, st)
+dxdt_u(model::CoupledOscillators, x, u::Nothing, t, p, st) = model(x, nothing, t, p, st)
