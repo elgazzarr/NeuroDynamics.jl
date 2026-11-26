@@ -116,21 +116,22 @@ function (m::HarmonicOscillators)(x, u::AbstractArray, t, p, st)
 
     @unpack ω, γ, K, B = p
 
-    dx = @. v_
-    dv = @. -γ * v_ - ω^2 * x_ + K * x_ + B * u
+    dx = v_
+    # K * x_ and B * u are matrix products; everything else is element-wise.
+    dv = @. -γ * v_ - ω^2 * x_ + $(K * x_) + $(B * u)
 
     return vcat(dx, dv), st
 end
 
-function (m::HarmonicOscillators)(x, nothing, t, p, st)
+function (m::HarmonicOscillators)(x, u::Nothing, t, p, st)
     N = m.N
     x_ = @view x[1:N, :]
     v_ = @view x[N+1:2N, :]
 
     @unpack ω, γ, K = p
 
-    dx = @. v_
-    dv = @. -γ * v_ - ω^2 * x_ + K * x_
+    dx = v_
+    dv = @. -γ * v_ - ω^2 * x_ + $(K * x_)
 
     return vcat(dx, dv), st
 end
