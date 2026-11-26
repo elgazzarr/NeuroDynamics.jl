@@ -55,6 +55,41 @@ model = LatentUDE(obs_encoder, ctrl_encoder, dynamics, obs_decoder, ctrl_decoder
 ```
 
 
+## Available models
+
+Mechanistic drift functions that can be used as the `drift` of an `ODE` or `SDE`:
+
+| Family | Models |
+|---|---|
+| Oscillators | `HarmonicOscillators`, `BistableOscillators`, `CoupledOscillators` |
+| Neural populations | `WilsonCowan`, `ModernWilsonCowan` |
+| Single neurons | `FitzHughNagumo`, `HodgkinHuxley` |
+
+Any Lux layer (e.g. a `Chain` of `Dense` layers) can also be used as a neural drift.
+
+### Coupled oscillators (CO-SDE / CO-ODE)
+
+`CoupledOscillators(N, M)` is the drift of the coupled-oscillator model in
+[ElGazzar & van Gerven, *Generative Modeling of Neural Dynamics via Latent SDEs*](https://arxiv.org/abs/2412.12112).
+It models `N` Hopf oscillators with state `x = vcat(a, b)` (real and imaginary parts, length `2N`),
+learnable per-oscillator bifurcation parameters `α` and frequencies `ω`, and a scalar
+input-dependent coupling `κ(u)` given by a small MLP of the `M`-dimensional encoded input:
+
+```
+da = α a − ω b − (a² + b²) a + κ(u) a
+db = ω a + α b − (a² + b²) b + κ(u) b
+```
+
+```julia
+n_osc = 8                                     # 8 oscillators → 16 latent states
+drift = CoupledOscillators(n_osc, ctrl_dim)
+drift_aug = Chain(Dense(2n_osc + hp["context_dim"] + ctrl_dim, hp["hidden_dim"], relu), Dense(hp["hidden_dim"], 2n_osc, tanh))
+diffusion = Scale(2n_osc, sigmoid)
+dynamics = SDE(drift, drift_aug, diffusion, EulerHeun(), dt=0.1)   # CO-SDE
+# dynamics = ODE(drift, Euler(), dt=0.1)                         # CO-ODE
+```
+
+
 ## Citation 
 
 If you use this package in your research, please cite the following paper:

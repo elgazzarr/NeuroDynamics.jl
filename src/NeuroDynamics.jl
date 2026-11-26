@@ -32,7 +32,7 @@ export kl_normal, poisson_loglikelihood, normal_loglikelihood, mse, frange_cycle
 
 # Models
 include("models/oscillators.jl")
-export HarmonicOscillators, BistableOscillators
+export HarmonicOscillators, BistableOscillators, CoupledOscillators
 include("models/neural_populations.jl")
 export WilsonCowan, ModernWilsonCowan
 include("models/single_neuron.jl")
